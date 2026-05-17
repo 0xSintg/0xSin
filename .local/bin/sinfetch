@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# sinfetch - system fetch for 0xSin
+# Replaces rxfetch with a clean gray-themed Android/Termux fetch
+
+gray="\033[1;37m"
+dark="\e[90m"
+dim="\e[37m"
+green="\033[1;32m"
+yellow="\033[1;33m"
+red="\033[1;31m"
+blue="\033[1;34m"
+reset="\033[0m"
+
+function getModel()    { model="$(getprop ro.product.brand) $(getprop ro.product.model)"; }
+function getCodeName() { codename="$(getprop ro.product.board)"; }
+function getClient()   { client="$(getprop ro.com.google.clientidbase)"; }
+function getOS()       { os="$(uname -o) $(uname -m)"; }
+function getKernel()   { kernel="$(uname -r)"; }
+function getShell()    { shell="$(basename $SHELL)"; }
+function getUptime()   { up="$(uptime --pretty | sed 's/up//' | xargs)"; }
+
+function getPackages() {
+  pkg_mgr="$(which apt dpkg 2>/dev/null | grep -v 'not found' | awk -F/ 'NR==1{print $NF}')"
+  case "${pkg_mgr}" in
+    "apt")  packages=$(apt list --installed 2>/dev/null | wc -l) ;;
+    "dpkg") packages=$(dpkg-query -l | wc -l) ;;
+    *)      packages="unknown" ;;
+  esac
+}
+
+function getMemory() {
+  _row="$(free --mega | grep 'Mem:')"
+  _total="$(echo ${_row} | awk '{print $2}')"
+  _used="$(echo ${_row} | awk '{print $3}')"
+  memory="${_used}MB / ${_total}MB"
+}
+
+function getDisk() {
+  _row="$(df -h | grep '/data')"
+  _used="$(echo ${_row} | awk '{print $3}')"
+  _size="$(echo ${_row} | awk '{print $2}')"
+  _avail="$(echo ${_row} | awk '{print $4}')"
+  _pct="$(echo ${_row} | awk '{print $5}')"
+  storage="${_used}B / ${_size}B  ${_avail}B free  (${_pct})"
+}
+
+getModel; getCodeName; getClient; getOS; getKernel
+getPackages; getShell; getUptime; getMemory; getDisk
+
+logo_c1="${gray}"
+logo_c2="${dark}"
+logo_c3="${dim}"
+
+echo -e ""
+echo -e "  ${logo_c1}███████╗██╗███╗         ██╗${reset}"
+echo -e "  ${logo_c1}██╔════╝██║████╗      ██║${reset}   ${dark}${codename}${reset}${dim}@${reset}${dark}${client}${reset}"
+echo -e "  ${logo_c1}███████╗██║██╔██╗   ██║${reset}"
+echo -e "  ${logo_c1}╚════██║██║██║╚██╗██║${reset}    ${dim}phone${reset}   ${gray}${model}${reset}"
+echo -e "  ${logo_c1}███████║██║██║ ╚████║${reset}    ${dim}os${reset}      ${gray}${os}${reset}"
+echo -e "  ${logo_c1}╚══════╝╚═╝╚═╝  ╚═══╝${reset}    ${dim}kernel${reset}  ${gray}${kernel}${reset}"
+echo -e "                          ${dim}pkgs${reset}    ${gray}${packages}${reset}"
+echo -e "                          ${dim}shell${reset}   ${gray}${shell}${reset}"
+echo -e "                          ${dim}uptime${reset}  ${gray}${up}${reset}"
+echo -e "                          ${dim}ram${reset}     ${gray}${memory}${reset}"
+echo -e "                          ${dim}disk${reset}    ${gray}${storage}${reset}"
+echo -e ""
+echo -e "  ${dark}━━━${reset}${dim}━━━${reset}${gray}━━━${reset}${dim}━━━${reset}${dark}━━━${reset}${dim}━━━${reset}${gray}━━━${reset}"
+echo -e ""

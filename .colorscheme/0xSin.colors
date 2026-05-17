@@ -1,0 +1,21 @@
+# 0xSin.colors
+# Clean gray terminal theme
+color0=#1C1C1C
+color1=#CC4444
+color2=#88AA77
+color3=#BBAA66
+color4=#667799
+color5=#997799
+color6=#888888
+color7=#CCCCCC
+color8=#444444
+color9=#DD5555
+color10=#99BB88
+color11=#CCBB77
+color12=#7788AA
+color13=#AA88AA
+color14=#AAAAAA
+color15=#EEEEEE
+background=#111111
+foreground=#CCCCCC
+cursor=#AAAAAA

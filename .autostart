@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export COLUMNS LINES
+
+# cursor underline
+echo -e "\e[4 q"
+
+sinfetch
