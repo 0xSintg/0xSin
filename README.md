@@ -9,7 +9,7 @@
 ╚══════╝╚═╝╚═╝  ╚═══╝
 ```
 
-**A clean, minimal Termux dotfiles setup for Android.**
+**Termux dotfiles setup for Android.**
 
 ![version](https://img.shields.io/badge/version-1.0.0-555555?style=flat-square)
 ![platform](https://img.shields.io/badge/platform-Android%20%7C%20Termux-36b2b2?style=flat-square)
