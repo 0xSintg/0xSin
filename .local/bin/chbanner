@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# chbanner — change 0xSin installer banner name + ASCII style
+
+c="\033[1;36m"
+y="\033[1;33m"
+w="\033[1;37m"
+d="\e[90m"
+r="\033[0m"
+
+_CFG_NAME="$HOME/.config/0xSin/banner_name"
+_CFG_STYLE="$HOME/.config/0xSin/banner_style"
+_CURRENT_NAME="$( [[ -f ${_CFG_NAME} ]] && cat ${_CFG_NAME} || echo '0xSin' )"
+_CURRENT_STYLE="$( [[ -f ${_CFG_STYLE} ]] && cat ${_CFG_STYLE} || echo 'default' )"
+
+mkdir -p "$HOME/.config/0xSin"
+
+echo -e ""
+echo -e "  ${d}current  ${r}${c}${_CURRENT_NAME}${r}  ${d}style ${r}${c}${_CURRENT_STYLE}${r}"
+echo -e ""
+
+echo -e "  ${w}Banner name ${d}[blank = keep current]${r}"
+echo -en "  ${c}»${r} "
+read NEW_NAME
+[[ -n "${NEW_NAME}" ]] && echo "${NEW_NAME}" > "${_CFG_NAME}"
+
+echo -e ""
+echo -e "  ${w}ASCII style${r}"
+echo -e "  ${d}[1]${r} ${w}default${r}  — clean block"
+echo -e "  ${d}[2]${r} ${c}shadow${r}   — offset shadow"
+echo -e "  ${d}[3]${r} ${c}hollow${r}   — outline"
+echo -e "  ${d}[4]${r} ${c}slant${r}    — shifted"
+echo -e "  ${d}[blank]${r} keep current"
+echo -en "\n  ${c}»${r} "
+read STYLE_CHOICE
+
+case "${STYLE_CHOICE}" in
+  1) echo "default" > "${_CFG_STYLE}" ;;
+  2) echo "shadow"  > "${_CFG_STYLE}" ;;
+  3) echo "hollow"  > "${_CFG_STYLE}" ;;
+  4) echo "slant"   > "${_CFG_STYLE}" ;;
+  *) : ;;
+esac
+
+_FINAL_NAME="$( cat ${_CFG_NAME} )"
+_FINAL_STYLE="$( cat ${_CFG_STYLE} )"
+echo -e ""
+echo -e "  ${c}  Done. ${d}banner${r} ${c}${_FINAL_NAME}${r}  ${d}style${r} ${c}${_FINAL_STYLE}${r}\n"

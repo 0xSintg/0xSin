@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# chprompt — change 0xSin prompt name at runtime
+
+c="\033[1;36m"
+y="\033[1;33m"
+w="\033[1;37m"
+d="\e[90m"
+r="\033[0m"
+
+_CFG="$HOME/.config/0xSin/prompt_name"
+_THEME="$HOME/.oh-my-zsh/custom/themes/ma.zsh-theme"
+_CURRENT="$( [[ -f ${_CFG} ]] && cat ${_CFG} || echo '0xSin' )"
+
+echo -e ""
+echo -e "  ${d}current  ${r}${c}root@${_CURRENT}${r}"
+echo -e "  ${w}New prompt name ${d}[blank = keep current]${r}"
+echo -en "  ${c}»${r} "
+read NEW_NAME
+
+if [[ -z "${NEW_NAME}" ]]; then
+  echo -e "  ${y}  No change.${r}\n"
+  exit 0
+fi
+
+mkdir -p "$HOME/.config/0xSin"
+echo "${NEW_NAME}" > "${_CFG}"
+
+echo -e "  ${c}  Done. ${d}prompt set to ${r}${c}root@${NEW_NAME}${r}"
+echo -e "  ${d}Run${r} ${w}source ~/.zshrc${r} ${d}to apply.${r}\n"

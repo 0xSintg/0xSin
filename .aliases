@@ -140,3 +140,7 @@ alias zshthemeconf="nvim ~/.scripts/zsh/changetheme.sh"
 # Termux:API
 alias scan="termux-media-scan"
 alias open="termux-open"
+
+# 0xSin Config
+alias chprompt="~/.local/bin/chprompt"
+alias chbanner="~/.local/bin/chbanner"

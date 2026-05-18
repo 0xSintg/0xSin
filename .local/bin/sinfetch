@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
 # sinfetch - 0xSin system fetch
+# Colors: gray=primary, cyan=secondary, yellow=alert
 
-w="\033[1;37m"   # bold white
-d="\033[0;90m"   # dark gray
-g="\033[0;37m"   # gray
+w="\033[1;37m"   # bold gray/white  — primary
+c="\033[1;36m"   # bold cyan        — secondary / labels
+y="\033[1;33m"   # bold yellow      — alert / separator
+d="\033[0;90m"   # dark gray        — shadow / dim
+g="\033[0;37m"   # gray             — values
 r="\033[0m"      # reset
+
+# Read prompt name for user@host line
+_NAME_FILE="$HOME/.config/0xSin/prompt_name"
+_OXSIN_NAME="$( [[ -f ${_NAME_FILE} ]] && cat ${_NAME_FILE} || echo '0xSin' )"
 
 function getModel()    { model="$(getprop ro.product.brand 2>/dev/null) $(getprop ro.product.model 2>/dev/null)"; }
 function getCodeName() { codename="$(getprop ro.product.board 2>/dev/null)"; }
@@ -14,41 +21,30 @@ function getOS()       { os="$(uname -o) $(uname -m)"; }
 function getKernel()   { kernel="$(uname -r)"; }
 function getShell()    { shell="$(basename $SHELL)"; }
 function getUptime()   { up="$(uptime -p 2>/dev/null | sed 's/up //' || uptime | sed 's/.*up //' | cut -d',' -f1,2)"; }
-
-function getPackages() {
-  packages=$(dpkg-query -l 2>/dev/null | grep -c "^ii" || echo "unknown")
-}
-
+function getPackages() { packages=$(dpkg-query -l 2>/dev/null | grep -c "^ii" || echo "unknown"); }
 function getMemory() {
   _row="$(free --mega 2>/dev/null | grep 'Mem:')"
-  _total="$(echo ${_row} | awk '{print $2}')"
-  _used="$(echo ${_row} | awk '{print $3}')"
-  memory="${_used}MB / ${_total}MB"
+  memory="$(echo ${_row} | awk '{print $3}')MB / $(echo ${_row} | awk '{print $2}')MB"
 }
-
 function getDisk() {
   _row="$(df -h /data 2>/dev/null | tail -1)"
-  _used="$(echo ${_row} | awk '{print $3}')"
-  _size="$(echo ${_row} | awk '{print $2}')"
-  _avail="$(echo ${_row} | awk '{print $4}')"
-  _pct="$(echo ${_row} | awk '{print $5}')"
-  storage="${_used} / ${_size}  ${_avail} free  (${_pct})"
+  storage="$(echo ${_row} | awk '{print $3}') / $(echo ${_row} | awk '{print $2}')  $(echo ${_row} | awk '{print $4}') free  ($(echo ${_row} | awk '{print $5}'))"
 }
 
 getModel; getCodeName; getClient; getOS; getKernel
 getPackages; getShell; getUptime; getMemory; getDisk
 
 echo ""
-echo -e "${w}███████╗██╗███╗   ██╗${r}   ${d}${codename}${r}${g}@${r}${d}${client}${r}"
-echo -e "${w}██╔════╝██║████╗  ██║${r}"
-echo -e "${w}███████╗██║██╔██╗ ██║${r}   ${g}phone  ${r}${w}${model}${r}"
-echo -e "${w}╚════██║██║██║╚██╗██║${r}   ${g}os     ${r}${w}${os}${r}"
-echo -e "${w}███████║██║██║ ╚████║${r}   ${g}kernel ${r}${w}${kernel}${r}"
-echo -e "${w}╚══════╝╚═╝╚═╝  ╚═══╝${r}   ${g}pkgs   ${r}${w}${packages}${r}"
-echo -e "                      ${g}shell  ${r}${w}${shell}${r}"
-echo -e "                      ${g}uptime ${r}${w}${up}${r}"
-echo -e "                      ${g}ram    ${r}${w}${memory}${r}"
-echo -e "                      ${g}disk   ${r}${w}${storage}${r}"
+echo -e "${w}  ███████╗██╗███╗   ██╗${r}   ${d}root${r}${d}@${r}${c}${_OXSIN_NAME}${r}"
+echo -e "${w}  ██╔════╝██║████╗  ██║${r}"
+echo -e "${w}  ███████╗██║██╔██╗ ██║${r}   ${c}phone  ${r}${g}${model}${r}"
+echo -e "${w}  ╚════██║██║██║╚██╗██║${r}   ${c}os     ${r}${g}${os}${r}"
+echo -e "${w}  ███████║██║██║ ╚████║${r}   ${c}kernel ${r}${g}${kernel}${r}"
+echo -e "${w}  ╚══════╝╚═╝╚═╝  ╚═══╝${r}   ${c}pkgs   ${r}${g}${packages}${r}"
+echo -e "                        ${c}shell  ${r}${g}${shell}${r}"
+echo -e "                        ${c}uptime ${r}${g}${up}${r}"
+echo -e "                        ${c}ram    ${r}${g}${memory}${r}"
+echo -e "                        ${c}disk   ${r}${g}${storage}${r}"
 echo ""
-echo -e "  ${d}───${r}${g}───${r}${w}───${r}${g}───${r}${d}───${r}${g}───${r}${w}───${r}"
+echo -e "  ${d}───${r}${g}───${r}${w}───${r}${c}───${r}${y}───${r}${c}───${r}${w}───${r}"
 echo ""
