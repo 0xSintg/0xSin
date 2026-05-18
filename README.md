@@ -25,14 +25,14 @@
 ```
 ███████╗██╗███╗   ██╗   root@0xSin
 ██╔════╝██║████╗  ██║
-███████╗██║██╔██╗ ██║   phone   POCO 21061110AG
+███████╗██║██╔██╗ ██║   phone   <Test Preview only
 ╚════██║██║██║╚██╗██║   os      Android aarch64
 ███████║██║██║ ╚████║   kernel  4.14.186-android
 ╚══════╝╚═╝╚═╝  ╚═══╝   pkgs    352
-                         shell   zsh
-                         uptime  9h 37m
-                         ram     4463MB / 7840MB
-                         disk    14GB / 228GB  84GB free
+                           shell   zsh
+                           uptime  9h 37m
+                           ram     4463MB / 7840MB
+                           disk    14GB / 228GB  84GB free
 
   ───────────────────────────────
 ```
